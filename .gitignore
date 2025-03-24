@@ -1,0 +1,15 @@
+# Ignorar o arquivo .env com variáveis sensíveis
+.env
+
+# Ignorar a pasta node_modules, que contém dependências
+/node_modules/
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de banco de dados locais
+*.sqlite
+
+# Ignorar diretórios temporários e de compilação
+/dist
+/build
