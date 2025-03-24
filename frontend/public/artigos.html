@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artigos - Variola Virulenta</title>
+  <link rel="stylesheet" href="../styles/admin.css">
+</head>
+<body>
+  <h1>Artigos</h1>
+  <div id="articles"></div>
+
+  <script>
+    fetch('/api/articles')
+      .then(response => response.json())
+      .then(data => {
+        const articlesDiv = document.getElementById('articles');
+        data.forEach(article => {
+          const articleDiv = document.createElement('div');
+          articleDiv.innerHTML = `
+            <h2>${article.title}</h2>
+            <p>${article.summary}</p>
+            <a href="artigo.html?id=${article._id}">Leia mais</a>
+          `;
+          articlesDiv.appendChild(articleDiv);
+        });
+      });
+  </script>
+</body>
+</html>

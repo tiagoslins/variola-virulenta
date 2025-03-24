@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postar Artigo - Admin</title>
+  <link rel="stylesheet" href="../styles/admin.css">
+</head>
+<body>
+  <div class="post-container">
+    <h2>Postar Artigo</h2>
+    <form id="postForm">
+      <input type="text" id="title" placeholder="Título" required>
+      <input type="text" id="coverImage" placeholder="URL da Imagem de Capa" required>
+      <textarea id="summary" placeholder="Resumo do Artigo" required></textarea>
+      <textarea id="content" placeholder="Conteúdo Completo" required></textarea>
+      <input type="text" id="author" placeholder="Autor" required>
+      <button type="submit">Postar Artigo</button>
+    </form>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
+
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const coverImage = document.getElementById('coverImage').value;
+      const summary = document.getElementById('summary').value;
+      const content = document.getElementById('content').value;
+      const author = document.getElementById('author').value;
+
+      const response = await fetch('/api/articles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        },
+        body: JSON.stringify({ title, coverImage, summary, content, author }),
+      });
+
+      if (response.ok) {
+        alert('Artigo postado com sucesso!');
+        window.location.href = '../public/artigos.html';
+      } else {
+        alert('Erro ao postar artigo');
+      }
+    });
+  </script>
+</body>
+</html>
