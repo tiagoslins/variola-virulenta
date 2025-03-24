@@ -1,17 +1,32 @@
 const express = require('express');
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/auth');
-const articleRoutes = require('./routes/articles');
-const authMiddleware = require('./middleware/auth');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+
+// Carregar variáveis de ambiente
+dotenv.config();
 
 const app = express();
-connectDB();
+app.use(cors());
+app.use(bodyParser.json());
 
-app.use(express.json());
-app.use('/api/auth', authRoutes);
-app.use('/api/articles', authMiddleware, articleRoutes);
+// Conectar ao banco de dados MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB conectado'))
+.catch((err) => console.log('Erro na conexão com o MongoDB', err));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+// Importar rotas
+const articleRoutes = require('./routes/articleRoutes');
+const userRoutes = require('./routes/userRoutes');
+
+// Usar as rotas
+app.use('/api/articles', articleRoutes);
+app.use('/api/users', userRoutes);
+
+// Definir a porta do servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
