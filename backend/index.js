@@ -1,21 +1,22 @@
 const express = require('express');
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/authRoutes');
-require('dotenv').config();
-
+const path = require('path');
 const app = express();
 
-// Conectar ao banco de dados
-connectDB();
+// Serve arquivos estáticos da pasta 'frontend'
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Middleware
-app.use(express.json());
+// Rota para a página inicial
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'index.html'));  // Ajuste o caminho para o index.html
+});
 
-// Rotas
-app.use('/api/auth', authRoutes);
+// Exemplo de outras rotas, se necessário
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'index.html')); // Pode adicionar outras rotas
+});
 
-// Iniciar o servidor
+// Definir a porta para o servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
